@@ -1,0 +1,17 @@
+{
+  "name": "agent-context-playground",
+  "description": "Interactive demo playground for testing Agent Context Comments in Chrome DevTools across the Elements, Network, and Sources panels.",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^6.2.0",
+    "vite-plugin-devtools-json": "^0.0.3"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "catalogVersion": "2026.09",
+  "currency": "USD",
+  "limit": 5,
+  "items": [
+    {
+      "sku": "MCP-DEV-01",
+      "name": "DevTools Protocol Inspector Pro",
+      "category": "Developer Tools",
+      "price": 49.00,
+      "inStock": true,
+      "rating": 4.9
+    },
+    {
+      "sku": "MCP-NET-02",
+      "name": "Network HAR Analyzer & Replay Suite",
+      "category": "Diagnostics",
+      "price": 79.00,
+      "inStock": true,
+      "rating": 4.8
+    },
+    {
+      "sku": "MCP-DOM-03",
+      "name": "Semantic Accessibility Tree Visualizer",
+      "category": "Accessibility",
+      "price": 29.00,
+      "inStock": true,
+      "rating": 4.7
+    },
+    {
+      "sku": "MCP-PERF-04",
+      "name": "Flamechart Trace Profiler Extension",
+      "category": "Performance",
+      "price": 99.00,
+      "inStock": false,
+      "rating": 4.9
+    },
+    {
+      "sku": "MCP-SEC-05",
+      "name": "Origin Allowlist & CSP Policy Validator",
+      "category": "Security",
+      "price": 59.00,
+      "inStock": true,
+      "rating": 4.6
+    }
+  ]
+}

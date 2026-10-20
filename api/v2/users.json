@@ -1,0 +1,34 @@
+{
+  "apiVersion": "2.0.0",
+  "schema": "urn:devtools:mcp:users:v2",
+  "generatedAt": "2026-09-16T11:10:00Z",
+  "meta": {
+    "region": "us-west1",
+    "cacheControl": "max-age=120",
+    "allowlistEnforced": true
+  },
+  "data": [
+    {
+      "uid": "usr_v2_001",
+      "profile": {
+        "displayName": "Alex Rivera",
+        "handle": "@arivera",
+        "title": "Staff Frontend Architect",
+        "team": "Chrome DevTools MCP"
+      },
+      "permissions": ["comments:read", "comments:write", "network:inspect"],
+      "activeSession": true
+    },
+    {
+      "uid": "usr_v2_002",
+      "profile": {
+        "displayName": "Elena Rostova",
+        "handle": "@erostova",
+        "title": "Principal Systems Engineer",
+        "team": "Browser Automation"
+      },
+      "permissions": ["comments:read", "comments:write", "network:inspect", "admin:all"],
+      "activeSession": true
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "usr_948102",
+  "username": "alex.rivera",
+  "fullName": "Alex Rivera",
+  "role": "Staff Frontend Architect",
+  "department": "Developer Experience & Tooling",
+  "email": "alex.rivera@example.com",
+  "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
+  "status": "active",
+  "preferences": {
+    "theme": "system",
+    "devtoolsCommentsEnabled": true,
+    "allowlistDomains": [
+      "localhost",
+      "127.0.0.1",
+      "internal.devtools.example.com"
+    ],
+    "notifications": {
+      "email": true,
+      "slack": true,
+      "webhookUrl": "https://hooks.example.com/services/T000/B000/X000"
+    }
+  },
+  "lastLoginAt": "2026-09-16T10:42:19Z"
+}

@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-09-16T11:00:00Z",
+  "totalCount": 3,
+  "users": [
+    {
+      "id": "usr_948102",
+      "fullName": "Alex Rivera",
+      "role": "Staff Frontend Architect",
+      "email": "alex.rivera@example.com",
+      "status": "active"
+    },
+    {
+      "id": "usr_948103",
+      "fullName": "Elena Rostova",
+      "role": "Principal Systems Engineer",
+      "email": "elena.rostova@example.com",
+      "status": "active"
+    },
+    {
+      "id": "usr_948104",
+      "fullName": "Marcus Vance",
+      "role": "Product Design Lead",
+      "email": "marcus.vance@example.com",
+      "status": "away"
+    }
+  ]
+}

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent Context Playground — Chrome DevTools Agent Context Comments Demo</title>
+  <meta name="description" content="Interactive playground for testing Agent Context Comments in Chrome DevTools across the Elements, Network, and Sources panels." />
+  <link rel="icon" type="image/svg+xml" href="devtools.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand" id="nav-brand-link">
+        <img src="devtools.svg" alt="Chrome DevTools logo" class="brand-logo" width="34" height="34" />
+        <div class="brand-text-group">
+          <span class="brand-title">Agent Context Playground</span>
+          <span class="brand-subtitle">Chrome DevTools · Agent Context Comments</span>
+        </div>
+      </a>
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="#workflow-guide" class="nav-link" id="nav-link-workflow">How It Works</a></li>
+          <li><a href="#part-a-guided-tests" class="nav-link" id="nav-link-guided">Guided Scenarios</a></li>
+          <li><a href="#card-pricing" class="nav-link" id="nav-link-pricing">Pricing</a></li>
+          <li><a href="#card-counter" class="nav-link" id="nav-link-counter">Diagnostics</a></li>
+          <li><a href="#card-tasks" class="nav-link" id="nav-link-tasks">Issue Tracker</a></li>
+          <li><a href="#card-form" class="nav-link" id="nav-link-settings">Settings Form</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="btn btn-secondary" id="theme-toggle-btn">Switch to Dark Mode</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title" id="hero-heading">Agent Context Playground</h1>
+        <p class="hero-subtitle" id="hero-subtitle">
+          Anchor contextual comments directly to DOM elements, Network requests, and JavaScript source lines in Chrome DevTools and hand them off to your AI coding agent via the Chrome DevTools MCP server.
+        </p>
+      </div>
+
+      <div class="diagnostics-bar" role="region" aria-label="Live Environment Diagnostics">
+        <div class="diag-item">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span class="diag-label">Server Status:</span>
+          <span class="diag-value" id="diag-status">Online (HTTP 200)</span>
+        </div>
+        <div class="diag-item">
+          <span class="diag-label">Active Origin:</span>
+          <span class="diag-value" id="diag-allowlist">localhost:5173</span>
+        </div>
+        <div class="diag-item">
+          <span class="diag-label">Viewport Size:</span>
+          <span class="diag-value" id="diag-viewport">-- × --</span>
+        </div>
+        <div class="diag-item">
+          <span class="diag-label">Last Event Time:</span>
+          <span class="diag-value" id="diag-timestamp">--:--:--</span>
+        </div>
+      </div>
+
+      <!-- 4-Step Workflow Strip -->
+      <div class="workflow-strip" id="workflow-guide" role="region" aria-label="Agent Context Comments Workflow">
+        <div class="workflow-step" id="workflow-step-1">
+          <span class="workflow-step-num">01</span>
+          <div class="workflow-step-body">
+            <strong class="workflow-step-title">Enable Comment Mode</strong>
+            <p class="workflow-step-desc">Open Chrome DevTools and click the <strong>Comment Mode</strong> icon in the top-left toolbar (next to the Element Picker).</p>
+          </div>
+        </div>
+        <div class="workflow-step" id="workflow-step-2">
+          <span class="workflow-step-num">02</span>
+          <div class="workflow-step-body">
+            <strong class="workflow-step-title">Anchor Your Comment</strong>
+            <p class="workflow-step-desc">Click any DOM node in <strong>Elements</strong>, request row in <strong>Network</strong>, or code line in <strong>Sources</strong> and write a prompt.</p>
+          </div>
+        </div>
+        <div class="workflow-step" id="workflow-step-3">
+          <span class="workflow-step-num">03</span>
+          <div class="workflow-step-body">
+            <strong class="workflow-step-title">Send to Coding Agent</strong>
+            <p class="workflow-step-desc">Open the <strong>Comments</strong> drawer (<code>Esc</code> → <strong>Comments</strong>) and click <strong>Send to Agent</strong>, or prompt your agent directly.</p>
+          </div>
+        </div>
+        <div class="workflow-step" id="workflow-step-4">
+          <span class="workflow-step-num">04</span>
+          <div class="workflow-step-body">
+            <strong class="workflow-step-title">Verify Fix &amp; Reply</strong>
+            <p class="workflow-step-desc">Your agent edits the workspace files, resolves the thread, and posts a reply right inside DevTools.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <!-- =====================================================================
+           PART A: GUIDED TEST CASES
+           ===================================================================== -->
+      <section class="section-block" id="part-a-guided-tests" aria-labelledby="heading-part-a">
+        <div class="section-header">
+          <div class="section-category-tag" id="tag-part-a">Part A · Guided Verification</div>
+          <h2 class="section-title" id="heading-part-a">Guided Scenarios for Agent Context Comments</h2>
+          <p class="section-subtitle">
+            Three structured scenarios covering all supported DevTools comment surfaces: the <strong>Elements</strong> panel, the <strong>Network</strong> panel, and the <strong>Sources</strong> panel.
+          </p>
+        </div>
+
+        <div class="guided-grid">
+          <!-- Test Case 1: Elements Panel — DOM & CSS Restyling -->
+          <article class="panel guided-card" id="test-case-1-card" aria-labelledby="heading-tc1">
+            <div class="panel-header">
+              <div class="card-badge-row">
+                <span class="step-badge" id="tc1-badge">Scenario 01</span>
+                <span class="panel-tag">Elements Panel · DOM &amp; CSS</span>
+              </div>
+              <h3 class="panel-title" id="heading-tc1">DOM &amp; Styling — Restyle Button or Fix Distorted Logo</h3>
+              <p class="panel-description">
+                Verify that anchoring a comment to a DOM element in the DevTools <strong>Elements</strong> panel gives your coding agent the exact node context needed to update CSS or markup.
+              </p>
+            </div>
+
+            <div class="instruction-callout" id="tc1-instructions" role="region" aria-label="Scenario 1 Instructions">
+              <h4 class="instruction-heading">How to Test:</h4>
+              <ol class="instruction-list">
+                <li>Right-click the crimson button (or the stretched logo badge) below and select <strong>Inspect</strong> to highlight it in the DevTools <strong>Elements</strong> panel.</li>
+                <li>Click the <strong>Comment Mode</strong> icon in the top-left DevTools toolbar and click the highlighted DOM node row (e.g. <code>&lt;button id="starter-target-btn"&gt;</code>).</li>
+                <li>Add a comment such as <strong><code>change button to blue</code></strong> or <strong><code>fix the distorted aspect ratio of this logo</code></strong>.</li>
+                <li>Click <strong>Send to Agent</strong> in the DevTools <strong>Comments</strong> drawer (or ask your coding agent: <strong><code>respond to my comments</code></strong>).</li>
+              </ol>
+            </div>
+
+            <div class="starter-target-stage" id="tc1-target-stage">
+              <div class="starter-targets-row">
+                <div class="starter-target-action">
+                  <button type="button" class="btn btn-starter-target" id="starter-target-btn">
+                    Deploy Production Release
+                  </button>
+                  <span class="starter-target-hint" id="starter-target-hint">Target A: <code>#starter-target-btn</code></span>
+                </div>
+
+                <div class="distorted-logo-box" id="distorted-logo-stage">
+                  <img
+                    src="devtools.svg"
+                    alt="Distorted Chrome DevTools logo"
+                    class="distorted-logo-img"
+                    id="distorted-logo-img"
+                  />
+                  <span class="starter-target-hint" id="distorted-logo-hint">Target B: <code>#distorted-logo-img</code> (stretched)</span>
+                </div>
+              </div>
+
+              <div class="starter-telemetry" id="starter-telemetry-box">
+                <div class="telemetry-row">
+                  <span class="telemetry-label">Button Background:</span>
+                  <code class="telemetry-code" id="starter-btn-color-readout">rgb(225, 29, 72)</code>
+                </div>
+                <div class="telemetry-row">
+                  <span class="telemetry-label">Logo Dimensions:</span>
+                  <code class="telemetry-code" id="distorted-logo-size-readout">132 × 42 px</code>
+                </div>
+                <div class="telemetry-row">
+                  <span class="telemetry-label">Button Clicks:</span>
+                  <code class="telemetry-code" id="starter-btn-click-readout">0 invocations</code>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Test Case 2: Network Panel — Request & Error Commenting -->
+          <article class="panel guided-card" id="test-case-2-card" aria-labelledby="heading-tc2">
+            <div class="panel-header">
+              <div class="card-badge-row">
+                <span class="step-badge" id="tc2-badge">Scenario 02</span>
+                <span class="panel-tag">Network Panel · Fetch &amp; HTTP Status</span>
+              </div>
+              <h3 class="panel-title" id="heading-tc2">Network Requests — Endpoint Migration &amp; 404 Handling</h3>
+              <p class="panel-description">
+                Trigger live <code>fetch()</code> requests and attach comments directly to request rows in the DevTools <strong>Network</strong> panel.
+              </p>
+            </div>
+
+            <div class="instruction-callout" id="tc2-instructions" role="region" aria-label="Scenario 2 Instructions">
+              <h4 class="instruction-heading">How to Test:</h4>
+              <ol class="instruction-list">
+                <li>Click any API button below to dispatch a live HTTP request.</li>
+                <li>Open the DevTools <strong>Network</strong> panel, enable <strong>Comment Mode</strong>, and click the request row (e.g. <code>user-profile.json</code> or <code>deprecated-endpoint.json</code>).</li>
+                <li>Leave a comment such as <strong><code>change this endpoint URL to api/v2/users.json</code></strong> or <strong><code>fallback to api/users.json when this endpoint returns 404</code></strong>.</li>
+                <li>Click <strong>Send to Agent</strong> in the <strong>Comments</strong> drawer (or ask your agent to resolve the comment).</li>
+              </ol>
+            </div>
+
+            <div class="network-controls" id="tc2-network-controls">
+              <button type="button" class="btn btn-secondary network-trigger-btn" id="btn-fetch-user-profile">
+                <span class="http-method-tag">GET</span>
+                <span>api/user-profile.json</span>
+                <span class="http-expected-tag">200 OK</span>
+              </button>
+              <button type="button" class="btn btn-secondary network-trigger-btn" id="btn-fetch-products">
+                <span class="http-method-tag">GET</span>
+                <span>api/products.json?limit=5&amp;currency=USD</span>
+                <span class="http-expected-tag">200 OK</span>
+              </button>
+              <button type="button" class="btn btn-danger-outline network-trigger-btn" id="btn-fetch-deprecated">
+                <span class="http-method-tag http-method-err">GET</span>
+                <span>api/deprecated-endpoint.json</span>
+                <span class="http-expected-tag">404 Not Found</span>
+              </button>
+            </div>
+
+            <div class="network-inspector-box" id="network-inspector-container">
+              <div class="network-meta-bar">
+                <span class="net-badge net-badge-idle" id="net-status-badge">IDLE</span>
+                <code class="net-url-display" id="net-request-url">No request sent yet</code>
+                <span class="net-latency-display" id="net-latency">-- ms</span>
+              </div>
+              <pre class="payload-preview network-payload-output" id="network-response-preview" aria-live="polite">{
+  "hint": "Click any API trigger button above to inspect the live HTTP response and view the request row in the DevTools Network panel."
+}</pre>
+            </div>
+          </article>
+
+          <!-- Test Case 3: Sources Panel — JavaScript Logic Bug -->
+          <article class="panel guided-card guided-card-wide" id="test-case-3-card" aria-labelledby="heading-tc3">
+            <div class="panel-header">
+              <div class="card-badge-row">
+                <span class="step-badge" id="tc3-badge">Scenario 03</span>
+                <span class="panel-tag">Sources Panel · Line-Level Code Comments</span>
+              </div>
+              <h3 class="panel-title" id="heading-tc3">Source Code Debugging — Fix the Promo Discount Calculation Bug</h3>
+              <p class="panel-description">
+                Test line-level comments in the DevTools <strong>Sources</strong> panel by anchoring feedback directly to a buggy JavaScript function in <code>app.js</code>.
+              </p>
+            </div>
+
+            <div class="tc3-split-layout">
+              <div class="instruction-callout" id="tc3-instructions" role="region" aria-label="Scenario 3 Instructions">
+                <h4 class="instruction-heading">How to Test:</h4>
+                <ol class="instruction-list">
+                  <li>Click <strong>Apply 20% Promo (DEVTOOLS20)</strong> on the right — notice the bug: the total <em>increases</em> from <code>$100.00</code> to <code>$120.00</code> instead of dropping to <code>$80.00</code>.</li>
+                  <li>Open the DevTools <strong>Sources</strong> panel, select <code>app.js</code>, and locate the <code>calculateDiscountedTotal</code> function.</li>
+                  <li>Enable <strong>Comment Mode</strong>, click the buggy formula line in <code>app.js</code>, and leave a comment: <strong><code>fix the discount calculation so it subtracts the discount amount instead of adding it</code></strong>.</li>
+                  <li>Click <strong>Send to Agent</strong> in the <strong>Comments</strong> drawer and verify the updated calculation.</li>
+                </ol>
+              </div>
+
+              <div class="discount-calculator-stage" id="discount-calculator-stage">
+                <div class="calc-summary-grid">
+                  <div class="calc-stat-box">
+                    <span class="diag-label">Order Subtotal</span>
+                    <span class="calc-stat-value" id="discount-subtotal-readout">$100.00</span>
+                  </div>
+                  <div class="calc-stat-box">
+                    <span class="diag-label">Promo Code</span>
+                    <span class="calc-stat-code" id="discount-code-readout">NONE (0%)</span>
+                  </div>
+                  <div class="calc-stat-box calc-stat-highlight">
+                    <span class="diag-label">Computed Total</span>
+                    <span class="calc-stat-value" id="discount-total-readout">$100.00</span>
+                  </div>
+                </div>
+
+                <div class="calc-controls-row">
+                  <button type="button" class="btn btn-primary" id="btn-apply-discount">
+                    Apply 20% Promo (DEVTOOLS20)
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="btn-reset-discount">
+                    Reset Subtotal
+                  </button>
+                  <span class="starter-target-hint" id="discount-formula-readout">
+                    Function: <code>calculateDiscountedTotal(100, 0.20)</code> in <code>app.js</code>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PART B: FREEFORM UI SANDBOX
+           ===================================================================== -->
+      <section class="section-block" id="part-b-sandbox" aria-labelledby="heading-part-b">
+        <div class="section-header">
+          <div class="section-category-tag" id="tag-part-b">Part B · Freeform UI Sandbox</div>
+          <h2 class="section-title" id="heading-part-b">Interactive Component Gallery</h2>
+          <p class="section-subtitle">
+            An open-ended collection of realistic UI components. Inspect any card, badge, input, or alert banner to test DevTools comments on layout, copy, accessibility, or state logic.
+          </p>
+        </div>
+
+        <!-- Card 1: Pricing & Plan Selector (Full Width) -->
+        <article class="panel sandbox-full-card" id="card-pricing" aria-labelledby="heading-pricing">
+          <div class="panel-header panel-header-flex">
+            <div>
+              <h3 class="panel-title" id="heading-pricing">Card 1: Pricing &amp; Plan Selector</h3>
+              <p class="panel-description">Three-tier subscription matrix ideal for testing text edits, badge colors, price adjustments, and CTA button states.</p>
+            </div>
+            <div class="billing-toggle-group" role="group" aria-label="Billing Frequency Toggle">
+              <button type="button" class="btn btn-toggle active" id="btn-billing-monthly">Monthly Billing</button>
+              <button type="button" class="btn btn-toggle" id="btn-billing-annual">Annual Billing (Save 20%)</button>
+            </div>
+          </div>
+
+          <div class="pricing-grid" id="pricing-tiers-container">
+            <!-- Tier 1: Starter -->
+            <div class="pricing-tier-card" id="plan-card-starter">
+              <div class="tier-header">
+                <h4 class="tier-name" id="tier-name-starter">Starter</h4>
+                <p class="tier-tagline" id="tier-tagline-starter">Essential tools for individual developers and local debugging.</p>
+              </div>
+              <div class="tier-price-block">
+                <span class="tier-price" id="price-value-starter">$0</span>
+                <span class="tier-period" id="price-period-starter">/ month</span>
+              </div>
+              <ul class="tier-features" id="features-list-starter">
+                <li class="tier-feature-item">Local DevTools MCP connection</li>
+                <li class="tier-feature-item">Up to 50 DOM &amp; CSS comments / day</li>
+                <li class="tier-feature-item">Standard accessibility tree snapshots</li>
+                <li class="tier-feature-item">Community forum &amp; documentation</li>
+              </ul>
+              <button type="button" class="btn btn-secondary tier-cta" id="btn-select-starter">Select Starter Plan</button>
+            </div>
+
+            <!-- Tier 2: Pro (Most Popular) -->
+            <div class="pricing-tier-card tier-featured" id="plan-card-pro">
+              <div class="tier-badge-row">
+                <span class="popular-badge" id="badge-most-popular">Most Popular</span>
+              </div>
+              <div class="tier-header">
+                <h4 class="tier-name" id="tier-name-pro">Pro</h4>
+                <p class="tier-tagline" id="tier-tagline-pro">Full-stack inspection and automated fixes for engineering teams.</p>
+              </div>
+              <div class="tier-price-block">
+                <span class="tier-price" id="price-value-pro">$29</span>
+                <span class="tier-period" id="price-period-pro">/ month</span>
+              </div>
+              <ul class="tier-features" id="features-list-pro">
+                <li class="tier-feature-item">Unlimited Elements, Network &amp; Sources comments</li>
+                <li class="tier-feature-item">Automated HAR replay &amp; endpoint migration</li>
+                <li class="tier-feature-item">Multi-tab session synchronization</li>
+                <li class="tier-feature-item">Custom workspace skill templates</li>
+              </ul>
+              <button type="button" class="btn btn-primary tier-cta" id="btn-select-pro">Upgrade to Pro</button>
+            </div>
+
+            <!-- Tier 3: Enterprise -->
+            <div class="pricing-tier-card" id="plan-card-enterprise">
+              <div class="tier-header">
+                <h4 class="tier-name" id="tier-name-enterprise">Enterprise</h4>
+                <p class="tier-tagline" id="tier-tagline-enterprise">Dedicated infrastructure, custom SLAs, and security compliance.</p>
+              </div>
+              <div class="tier-price-block">
+                <span class="tier-price" id="price-value-enterprise">$99</span>
+                <span class="tier-period" id="price-period-enterprise">/ month</span>
+              </div>
+              <ul class="tier-features" id="features-list-enterprise">
+                <li class="tier-feature-item">Self-hosted MCP relay &amp; SSO integration</li>
+                <li class="tier-feature-item">Organization-wide policy controls</li>
+                <li class="tier-feature-item">Real-time webhook audit logging</li>
+                <li class="tier-feature-item">24/7 dedicated solutions engineer</li>
+              </ul>
+              <button type="button" class="btn btn-secondary tier-cta" id="btn-select-enterprise">Contact Enterprise Sales</button>
+            </div>
+          </div>
+
+          <div class="pricing-status-bar" id="pricing-selection-status" role="status" aria-live="polite">
+            Active Selection: <strong>Pro Plan ($29 / month)</strong> — Ready for deployment.
+          </div>
+        </article>
+
+        <!-- Two-Column Grid for Cards 2, 3, 4, 5 -->
+        <div class="section-grid">
+          <!-- Card 2: Interactive Counter & Latency Diagnostics -->
+          <article class="panel" id="card-counter" aria-labelledby="heading-counter">
+            <div class="panel-header">
+              <h3 class="panel-title" id="heading-counter">Card 2: Interactive Counter &amp; Step Diagnostics</h3>
+              <p class="panel-description">Verify synchronous JavaScript state mutations, step increments, and interaction tracking.</p>
+            </div>
+            <div class="counter-widget">
+              <div class="counter-display-box">
+                <div>
+                  <span class="diag-label">Current Counter Value</span>
+                  <div class="counter-number" id="counter-value">0</div>
+                </div>
+                <div class="counter-meta-group">
+                  <span class="counter-meta" id="counter-clicks">0 interactions</span>
+                  <span class="counter-step-badge" id="counter-step-indicator">Step: +1</span>
+                </div>
+              </div>
+
+              <div class="step-selector-row" role="group" aria-label="Counter Step Size">
+                <span class="form-label">Step Multiplier:</span>
+                <div class="step-buttons">
+                  <button type="button" class="btn btn-step active" id="btn-step-1" data-step="1">1×</button>
+                  <button type="button" class="btn btn-step" id="btn-step-5" data-step="5">5×</button>
+                  <button type="button" class="btn btn-step" id="btn-step-10" data-step="10">10×</button>
+                </div>
+              </div>
+
+              <div class="button-group">
+                <button type="button" class="btn btn-secondary" id="btn-decrement">− Decrement</button>
+                <button type="button" class="btn btn-primary" id="btn-increment">+ Increment</button>
+                <button type="button" class="btn btn-secondary" id="btn-reset">Reset Value</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Interactive Task / Issue Tracker -->
+          <article class="panel" id="card-tasks" aria-labelledby="heading-tasks">
+            <div class="panel-header">
+              <h3 class="panel-title" id="heading-tasks">Card 3: Interactive Task / Issue Tracker</h3>
+              <p class="panel-description">Filterable issue list with priority tags, completion checkboxes, and item creation/removal.</p>
+            </div>
+
+            <div class="task-filter-bar" role="group" aria-label="Filter Tasks by Status">
+              <button type="button" class="btn btn-filter active" id="filter-all" data-filter="all">All Issues</button>
+              <button type="button" class="btn btn-filter" id="filter-active" data-filter="active">Open</button>
+              <button type="button" class="btn btn-filter" id="filter-completed" data-filter="completed">Resolved</button>
+            </div>
+
+            <div class="task-input-row">
+              <input
+                type="text"
+                id="task-input"
+                class="input-field"
+                placeholder="Add new engineering task..."
+                aria-label="New task title"
+              />
+              <select id="task-priority-select" class="input-field select-priority" aria-label="Task priority level">
+                <option value="High">High</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+              </select>
+              <button type="button" class="btn btn-primary" id="btn-add-task">Add Task</button>
+            </div>
+
+            <ul class="item-list" id="sandbox-item-list" aria-live="polite"></ul>
+          </article>
+
+          <!-- Card 4: Account Settings & Notification Preferences Form -->
+          <article class="panel" id="card-form" aria-labelledby="heading-form">
+            <div class="panel-header">
+              <h3 class="panel-title" id="heading-form">Card 4: Account Settings &amp; Notification Preferences</h3>
+              <p class="panel-description">Inspect form controls, select menus, checkboxes, and live serialized JSON payload output.</p>
+            </div>
+            <form class="test-form" id="sandbox-test-form">
+              <div class="form-group">
+                <label for="input-full-name" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  id="input-full-name"
+                  name="fullName"
+                  class="input-field"
+                  value="Ada Lovelace"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="input-email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  id="input-email"
+                  name="emailAddress"
+                  class="input-field"
+                  value="ada@example.com"
+                  required
+                />
+              </div>
+              <div class="form-grid-2col">
+                <div class="form-group">
+                  <label for="select-env" class="form-label">Target Environment</label>
+                  <select id="select-env" name="environment" class="input-field">
+                    <option value="development">Development (Local)</option>
+                    <option value="staging">Staging Sandbox</option>
+                    <option value="production">Production Cluster</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="select-frequency" class="form-label">Alert Digest Frequency</label>
+                  <select id="select-frequency" name="digestFrequency" class="input-field">
+                    <option value="instant">Instant Webhook</option>
+                    <option value="hourly">Hourly Summary</option>
+                    <option value="daily">Daily Digest</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-checkbox-group">
+                <div class="form-row">
+                  <input
+                    type="checkbox"
+                    id="input-allowlist"
+                    name="allowlistToggle"
+                    checked
+                  />
+                  <label for="input-allowlist" class="form-label-inline">Enable automatic workspace folder mapping in DevTools</label>
+                </div>
+                <div class="form-row">
+                  <input
+                    type="checkbox"
+                    id="input-webhooks"
+                    name="webhookNotifications"
+                    checked
+                  />
+                  <label for="input-webhooks" class="form-label-inline">Dispatch real-time DevTools comment notifications</label>
+                </div>
+              </div>
+              <div class="button-group">
+                <button type="submit" class="btn btn-primary" id="btn-submit-form">
+                  Serialize &amp; Inspect Payload
+                </button>
+                <button type="button" class="btn btn-secondary" id="btn-reset-form">
+                  Reset Defaults
+                </button>
+              </div>
+              <div class="alert-banner alert-success" id="form-alert-banner" role="status">
+                Settings serialized and updated in live preview below.
+              </div>
+            </form>
+            <pre class="payload-preview" id="form-payload-preview" aria-label="Serialized Form JSON Output">{
+  "status": "Ready — submit or edit the form above to inspect serialized JSON"
+}</pre>
+          </article>
+
+          <!-- Card 5: Typography & Alert Banner Showcase -->
+          <article class="panel" id="card-typography-alerts" aria-labelledby="heading-typography">
+            <div class="panel-header">
+              <h3 class="panel-title" id="heading-typography">Card 5: Typography &amp; Alert Banner Showcase</h3>
+              <p class="panel-description">System alert states and typographic scale specimens for testing visual hierarchy and contrast comments.</p>
+            </div>
+
+            <div class="alerts-showcase-section" id="alerts-showcase-container">
+              <div class="showcase-subheader">
+                <h4 class="showcase-subtitle" id="heading-alerts-list">System Alert Banners</h4>
+                <button type="button" class="btn btn-step" id="btn-cycle-alerts">Highlight Next Alert</button>
+              </div>
+
+              <div class="alert-stack">
+                <div class="alert-box alert-box-info" id="alert-banner-info" role="region" aria-label="Information Alert">
+                  <strong class="alert-title" id="alert-title-info">Info: DevTools MCP Bridge Ready</strong>
+                  <p class="alert-text" id="alert-text-info">Connected to Chrome with <code>--experimental-devtools-comments</code> enabled.</p>
+                </div>
+
+                <div class="alert-box alert-box-warning" id="alert-banner-warning" role="region" aria-label="Warning Alert">
+                  <strong class="alert-title" id="alert-title-warning">Warning: Legacy Endpoint Detected</strong>
+                  <p class="alert-text" id="alert-text-warning">Endpoint <code>api/deprecated-endpoint.json</code> returns HTTP 404; migrate callers to <code>api/v2/users.json</code>.</p>
+                </div>
+
+                <div class="alert-box alert-box-success" id="alert-banner-success" role="region" aria-label="Success Alert">
+                  <strong class="alert-title" id="alert-title-success">Success: Local Sandbox Verified</strong>
+                  <p class="alert-text" id="alert-text-success">All static assets and mock JSON endpoints are ready for inspection.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="typography-showcase-section" id="typography-showcase-container">
+              <h4 class="showcase-subtitle" id="heading-type-specimens">Typographic Scale Specimen</h4>
+              <div class="type-specimen-list">
+                <div class="type-specimen-item">
+                  <span class="type-meta">Display Bold · Plus Jakarta Sans 700</span>
+                  <p class="type-sample-lg" id="typo-sample-heading">Point, comment, and let your agent fix the code.</p>
+                </div>
+                <div class="type-specimen-item">
+                  <span class="type-meta">Body Regular · 1rem / 1.6 line-height</span>
+                  <p class="type-sample-body" id="typo-sample-body">
+                    Semantic markup and unique element IDs ensure every interactive button, form input, and network trigger is cleanly indexed by accessibility trees and DevTools comment anchors.
+                  </p>
+                </div>
+                <div class="type-specimen-item">
+                  <span class="type-meta">Monospace · JetBrains Mono 500</span>
+                  <code class="type-sample-mono" id="typo-sample-code">await fetch('api/v2/users.json', { method: 'GET' });</code>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span id="footer-brand-copy">Agent Context Playground · Chrome DevTools Agent Context Comments Demo</span>
+      <span id="footer-server-note">Served locally</span>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
